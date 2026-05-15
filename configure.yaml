@@ -1,0 +1,32 @@
+project: yourProjectName
+
+servers:
+  vps1:
+    host: 192.168.0.109
+    user: root
+    auth: password
+    password_env: VPS1_PASSWORD
+
+  vps2:
+    host: 192.168.0.110
+    user: root
+    auth: password
+    password_env: VPS2_PASSWORD
+
+services:
+  frontend:
+    server: vps1
+    path: /home/frontend
+    commands:
+      - git pull
+      - npm ci
+      - npm run build
+
+  backend:
+    server: vps2
+    path: /home/backend
+    commands:
+      - git pull
+      - docker build -t api .
+      - docker rm -f api || true
+      - docker run --name api -d -p 3000:8080 api
