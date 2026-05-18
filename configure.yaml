@@ -5,13 +5,11 @@ servers:
     host: 192.168.0.109
     user: root
     auth: password
-    password_env: VPS1_PASSWORD
 
   vps2:
     host: 192.168.0.110
     user: root
     auth: password
-    password_env: VPS2_PASSWORD
 
 services:
   frontend:
