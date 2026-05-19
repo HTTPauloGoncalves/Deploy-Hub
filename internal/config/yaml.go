@@ -28,10 +28,10 @@ func CreateConfigFile(projectName string, path string) error {
 
 	cfg := NewConfig(projectName)
 
-	return SaveConfig(path, cfg)
+	return saveConfig(path, cfg)
 }
 
-func SaveConfig(path string, cfg Config) error {
+func saveConfig(path string, cfg Config) error {
 	if path == "" {
 		path = defaultPath
 	}
@@ -45,7 +45,7 @@ func SaveConfig(path string, cfg Config) error {
 	return os.WriteFile(path, data, 0644)
 }
 
-func loadConfig(path string) (Config, error) {
+func LoadConfig(path string) (Config, error) {
 	if path == "" {
 		path = defaultPath
 	}
@@ -76,7 +76,7 @@ func loadConfig(path string) (Config, error) {
 }
 
 func AddServer(path string, name string, server Server) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return fmt.Errorf("Erro ao carregar as configurações. %s", err)
@@ -92,11 +92,11 @@ func AddServer(path string, name string, server Server) error {
 
 	cfg.Servers[name] = server
 
-	return SaveConfig(path, cfg)
+	return saveConfig(path, cfg)
 }
 
 func AddService(path string, name string, service Service) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return fmt.Errorf("Erro ao carregar as configurações. %s", err)
@@ -112,11 +112,11 @@ func AddService(path string, name string, service Service) error {
 
 	cfg.Services[name] = service
 
-	return SaveConfig(path, cfg)
+	return saveConfig(path, cfg)
 }
 
 func GetServer(path string, name string) (Server, error) {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return Server{}, err
@@ -132,7 +132,7 @@ func GetServer(path string, name string) (Server, error) {
 }
 
 func GetService(path string, name string) (Service, error) {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return Service{}, fmt.Errorf("Erro ao carregar as configurações. %s", err)
@@ -148,7 +148,7 @@ func GetService(path string, name string) (Service, error) {
 }
 
 func ListServers(path string) (map[string]Server, error) {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ func ListServers(path string) (map[string]Server, error) {
 }
 
 func ListServices(path string) (map[string]Service, error) {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return nil, err
@@ -168,7 +168,7 @@ func ListServices(path string) (map[string]Service, error) {
 }
 
 func RemoveService(path string, name string) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return err
@@ -176,13 +176,13 @@ func RemoveService(path string, name string) error {
 
 	delete(cfg.Services, name)
 
-	SaveConfig(path, cfg)
+	saveConfig(path, cfg)
 
 	return nil
 }
 
 func RemoveServer(path string, name string) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return err
@@ -190,13 +190,13 @@ func RemoveServer(path string, name string) error {
 
 	delete(cfg.Servers, name)
 
-	SaveConfig(path, cfg)
+	saveConfig(path, cfg)
 
 	return nil
 }
 
 func UpdateService(path string, name string, service Service) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return err
@@ -208,13 +208,13 @@ func UpdateService(path string, name string, service Service) error {
 
 	cfg.Services[name] = service
 
-	SaveConfig(path, cfg)
+	saveConfig(path, cfg)
 
 	return nil
 }
 
 func UpdateServer(path string, name string, service Server) error {
-	cfg, err := loadConfig(path)
+	cfg, err := LoadConfig(path)
 
 	if err != nil {
 		return err
@@ -226,7 +226,7 @@ func UpdateServer(path string, name string, service Server) error {
 
 	cfg.Servers[name] = service
 
-	SaveConfig(path, cfg)
+	saveConfig(path, cfg)
 
 	return nil
 }
