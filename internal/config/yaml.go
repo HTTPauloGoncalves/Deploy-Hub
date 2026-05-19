@@ -7,7 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const defaultPath = "deploy.yaml"
+const DefaultPath = "deploy.yaml"
 
 func NewConfig(projectName string) Config {
 	return Config{
@@ -19,7 +19,7 @@ func NewConfig(projectName string) Config {
 
 func CreateConfigFile(projectName string, path string) error {
 	if path == "" {
-		path = defaultPath
+		path = DefaultPath
 	}
 
 	if FileExists(path) {
@@ -33,7 +33,7 @@ func CreateConfigFile(projectName string, path string) error {
 
 func saveConfig(path string, cfg Config) error {
 	if path == "" {
-		path = defaultPath
+		path = DefaultPath
 	}
 
 	data, err := yaml.Marshal(&cfg)
@@ -47,7 +47,7 @@ func saveConfig(path string, cfg Config) error {
 
 func LoadConfig(path string) (Config, error) {
 	if path == "" {
-		path = defaultPath
+		path = DefaultPath
 	}
 
 	var cfg Config
@@ -106,7 +106,7 @@ func AddService(path string, name string, service Service) error {
 		return fmt.Errorf("O nome não pode estar vazio")
 	}
 
-	if _, exist := cfg.Servers[name]; exist {
+	if _, exist := cfg.Services[name]; exist {
 		return fmt.Errorf("Já existe um serviço de deploy com esse nome")
 	}
 
@@ -141,7 +141,7 @@ func GetService(path string, name string) (Service, error) {
 	service, exist := cfg.Services[name]
 
 	if !exist {
-		return Service{}, fmt.Errorf("O deploy %s não foi encontrado", err)
+		return Service{}, fmt.Errorf("O deploy %s não foi encontrado", name)
 	}
 
 	return service, nil
