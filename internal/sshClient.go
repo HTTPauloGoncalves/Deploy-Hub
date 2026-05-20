@@ -22,7 +22,7 @@ func ConnectWithPassword(user string, host string, port int, password string) (C
 		Timeout:         10 * time.Second,
 	}
 
-	address := fmt.Sprintf("%s@%s:%d", user, host, port)
+	address := fmt.Sprintf("%s:%d", host, port)
 
 	conn, err := ssh.Dial("tcp", address, config)
 
@@ -40,7 +40,7 @@ func (c *Client) Run(command string) (string, string, error) {
 		return "", "", err
 	}
 
-	defer c.Close()
+	defer session.Close()
 
 	var stdout bytes.Buffer
 	var stdin bytes.Buffer

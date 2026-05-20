@@ -28,6 +28,14 @@ func GetServer(name string) (config.Server, error) {
 	return server, nil
 }
 
+func ListServers() (map[string]config.Server, error) {
+	servers, err := config.ListServers(config.DefaultPath)
+	if err != nil {
+		return nil, err
+	}
+	return servers, nil
+}
+
 func DeleteServer(name string) error {
 	err := config.RemoveServer(config.DefaultPath, name)
 	if err != nil {

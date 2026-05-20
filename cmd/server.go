@@ -1,40 +1,88 @@
 /*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
+Copyright (c) 2026
 */
 package cmd
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/HTTPauloGoncalves/Deploy-Hub/internal"
+	"github.com/HTTPauloGoncalves/Deploy-Hub/internal/config"
 	"github.com/spf13/cobra"
 )
 
-// serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Gerencia servidores",
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+var serverAddCmd = &cobra.Command{
+	Use:   "add",
+	Short: "Adiciona um novo servidor",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("server called")
+		var name string
+		var host string
+		var user string
+		var password string
+		var auth string
+		var portInput string
+
+		survey.AskOne(&survey.Input{
+			Message: "Nome do servidor:",
+		}, &name)
+
+		survey.AskOne(&survey.Input{
+			Message: "Host:",
+		}, &host)
+
+		survey.AskOne(&survey.Input{
+			Message: "Usuario:",
+		}, &user)
+
+		survey.AskOne(&survey.Select{
+			Message: "Autenticacao:",
+			Options: []string{"password", "key"},
+			Default: "password",
+		}, &auth)
+
+		if auth == "password" {
+			survey.AskOne(&survey.Password{
+				Message: "Senha:",
+			}, &password)
+		}
+
+		survey.AskOne(&survey.Input{
+			Message: "Porta:",
+			Default: "22",
+		}, &portInput)
+
+		port, err := strconv.Atoi(portInput)
+		if err != nil {
+			fmt.Println("Erro: porta invalida")
+			return
+		}
+
+		server := config.Server{
+			Host:     host,
+			User:     user,
+			Password: password,
+			Auth:     auth,
+			Port:     port,
+		}
+
+		err = internal.NewServer(name, server)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		fmt.Println("Servidor adicionado com sucesso:", name)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serverCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	serverCmd.AddCommand(serverAddCmd)
 }

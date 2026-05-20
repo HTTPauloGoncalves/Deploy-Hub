@@ -1,40 +1,66 @@
 /*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-
+Copyright (c) 2026
 */
 package cmd
 
 import (
 	"fmt"
+	"sort"
 
+	"github.com/AlecAivazis/survey/v2"
+	"github.com/HTTPauloGoncalves/Deploy-Hub/internal"
 	"github.com/spf13/cobra"
 )
 
-// deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "deploy [servico]",
+	Short: "Executa o deploy de um servico",
+	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deploy called")
+		serviceName := ""
+
+		if len(args) > 0 {
+			serviceName = args[0]
+		} else {
+			services, err := internal.ListServices()
+			if err != nil {
+				fmt.Println("Erro:", err)
+				return
+			}
+
+			if len(services) == 0 {
+				fmt.Println("Nenhum servico cadastrado. Cadastre um servico antes de fazer deploy.")
+				return
+			}
+
+			serviceOptions := make([]string, 0, len(services))
+			for name := range services {
+				serviceOptions = append(serviceOptions, name)
+			}
+			sort.Strings(serviceOptions)
+
+			err = survey.AskOne(&survey.Select{
+				Message: "Servico:",
+				Options: serviceOptions,
+			}, &serviceName)
+			if err != nil {
+				fmt.Println("Erro:", err)
+				return
+			}
+		}
+
+		fmt.Println("Iniciando deploy:", serviceName)
+
+		err := internal.Deploy(serviceName)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		fmt.Println("Deploy finalizado com sucesso:", serviceName)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deployCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deployCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

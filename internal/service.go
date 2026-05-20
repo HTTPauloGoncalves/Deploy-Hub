@@ -28,6 +28,14 @@ func GetService(name string) (config.Service, error) {
 	return service, nil
 }
 
+func ListServices() (map[string]config.Service, error) {
+	services, err := config.ListServices(config.DefaultPath)
+	if err != nil {
+		return nil, err
+	}
+	return services, nil
+}
+
 func DeleteService(name string) error {
 	err := config.RemoveService(config.DefaultPath, name)
 	if err != nil {
