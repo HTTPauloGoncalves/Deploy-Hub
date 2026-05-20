@@ -12,7 +12,7 @@ type Client struct {
 	client *ssh.Client
 }
 
-func ConnectWithPassword(user string, password string) (Client, error) {
+func ConnectWithPassword(user string, host string, port int, password string) (Client, error) {
 	config := &ssh.ClientConfig{
 		User: user,
 		Auth: []ssh.AuthMethod{
@@ -22,7 +22,7 @@ func ConnectWithPassword(user string, password string) (Client, error) {
 		Timeout:         10 * time.Second,
 	}
 
-	address := fmt.Sprintf("%s:%d", user, 22)
+	address := fmt.Sprintf("%s@%s:%d", user, host, port)
 
 	conn, err := ssh.Dial("tcp", address, config)
 

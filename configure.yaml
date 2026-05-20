@@ -4,12 +4,16 @@ servers:
   vps1:
     host: 192.168.0.109
     user: root
+    password: yourPassword
     auth: password
+    port: 22
 
   vps2:
     host: 192.168.0.110
     user: root
+    password: yourPassword
     auth: password
+    port: 22
 
 services:
   frontend:

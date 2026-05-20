@@ -7,9 +7,11 @@ type Config struct {
 }
 
 type Server struct {
-	Host string `yaml:"host"`
-	User string `yaml:"user"`
-	Auth string `yaml:"auth"`
+	Host     string `yaml:"host"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password,omitempty"`
+	Auth     string `yaml:"auth"`
+	Port     int    `yaml:"port,omitempty"`
 }
 
 type Service struct {
