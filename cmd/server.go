@@ -138,9 +138,9 @@ var serverDeleteCmd = &cobra.Command{
 	},
 }
 
-var serviceUpdateCmd = &cobra.Command{
+var serverUpdateCmd = &cobra.Command{
 	Use:   "update",
-	Short: "Atualiza um serviço de deploy",
+	Short: "Atualiza um servidor cadastrado",
 	Run: func(cmd *cobra.Command, args []string) {
 		var name string
 
@@ -220,5 +220,5 @@ func init() {
 	serverCmd.AddCommand(serverAddCmd)
 	serverCmd.AddCommand(serverListCmd)
 	serverCmd.AddCommand(serverDeleteCmd)
-	serverCmd.AddCommand(serviceUpdateCmd)
+	serverCmd.AddCommand(serverUpdateCmd)
 }
