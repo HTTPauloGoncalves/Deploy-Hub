@@ -1,5 +1,7 @@
+$ErrorActionPreference = "Stop"
+
 $InstallDir = "$env:USERPROFILE\go\bin"
-$Url = "https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/latest/download/deployhub-windows-amd64.exe"
+$Url = "https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/download/v0.1.0/deployhub-windows-amd64.exe"
 
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 Invoke-WebRequest -Uri $Url -OutFile "$InstallDir\deployhub.exe"
@@ -12,3 +14,4 @@ if ($userPath -notlike "*$InstallDir*") {
 }
 
 Write-Host "DeployHub instalado!"
+Write-Host "Teste com: deployhub --help"
