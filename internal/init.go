@@ -2,12 +2,10 @@ package internal
 
 import "github.com/HTTPauloGoncalves/Deploy-Hub/internal/config"
 
-const constPath = "deploy.yaml"
-
 func Init(name string) {
-	if config.FileExists(constPath) {
+	if config.FileExists(config.DefaultPath) {
 
-		cfg, err := config.LoadConfig(constPath)
+		cfg, err := config.LoadConfig(config.DefaultPath)
 		if err != nil {
 			panic(err)
 		}
@@ -17,7 +15,7 @@ func Init(name string) {
 		return
 	}
 
-	err := config.CreateConfigFile(name, constPath)
+	err := config.CreateConfigFile(name, config.DefaultPath)
 
 	if err != nil {
 		panic(err)

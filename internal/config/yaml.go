@@ -3,11 +3,21 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v3"
 )
 
-const DefaultPath = "deploy.yaml"
+var DefaultPath = defaultConfigPath()
+
+func defaultConfigPath() string {
+	configDir, err := os.UserConfigDir()
+	if err != nil {
+		return "deploy.yaml"
+	}
+
+	return filepath.Join(configDir, "deployhub", "deploy.yaml")
+}
 
 func NewConfig(projectName string) Config {
 	return Config{
@@ -39,6 +49,10 @@ func saveConfig(path string, cfg Config) error {
 	data, err := yaml.Marshal(&cfg)
 
 	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return err
 	}
 

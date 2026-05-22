@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/HTTPauloGoncalves/Deploy-Hub/internal"
+	"github.com/HTTPauloGoncalves/Deploy-Hub/internal/config"
 )
 
 // initCmd represents the init command
@@ -26,7 +27,7 @@ var initCmd = &cobra.Command{
 
 		internal.Init(projectName)
 
-		fmt.Printf("Projeto %s inicializado com sucesso! Edite o arquivo deploy.yaml para configurar seus servidores e serviços.\n", projectName)
+		fmt.Printf("Projeto %s inicializado com sucesso! Edite o arquivo %s para configurar seus servidores e serviços.\n", projectName, config.DefaultPath)
 	},
 }
 
