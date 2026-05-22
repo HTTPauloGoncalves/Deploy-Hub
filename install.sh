@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME="deployhub"
-URL="https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/download/v0.1.0/deployhub-linux-amd64"
+URL="https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/download/v0.1.1/deployhub-linux-amd64"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/deployhub"
 
 curl -L "$URL" -o "$APP_NAME"
