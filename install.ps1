@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $InstallDir = "$env:USERPROFILE\go\bin"
 $ConfigDir = "$env:APPDATA\deployhub"
-$Url = "https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/download/v0.1.0/deployhub-windows-amd64.exe"
+$Url = "https://github.com/HTTPauloGoncalves/Deploy-Hub/releases/download/v0.1.1/deployhub-windows-amd64.exe"
 
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 New-Item -ItemType Directory -Force -Path $ConfigDir | Out-Null
