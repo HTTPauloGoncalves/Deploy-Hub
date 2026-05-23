@@ -29,6 +29,7 @@ var serverAddCmd = &cobra.Command{
 		var password string
 		var auth string
 		var portInput string
+		var confirm bool
 
 		survey.AskOne(&survey.Input{
 			Message: "Nome do servidor:",
@@ -73,6 +74,20 @@ var serverAddCmd = &cobra.Command{
 			Port:     port,
 		}
 
+		survey.AskOne(&survey.Confirm{
+			Message: "Confirmar adicao do servidor?",
+			Default: true,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Adicao do servidor cancelada.")
+			return
+		}
+
 		err = internal.NewServer(name, server)
 		if err != nil {
 			fmt.Println("Erro:", err)
@@ -110,6 +125,7 @@ var serverDeleteCmd = &cobra.Command{
 	Short: "Deleta um servidor cadastrado",
 	Run: func(cmd *cobra.Command, args []string) {
 		var name string
+		var confirm bool
 
 		servers, err := internal.ListServers()
 		if err != nil {
@@ -134,7 +150,27 @@ var serverDeleteCmd = &cobra.Command{
 			Options: serversOptions,
 		}, &name)
 
+		survey.AskOne(&survey.Confirm{
+			Message: fmt.Sprintf("Tem certeza que deseja deletar o servidor '%s'?", name),
+			Default: false,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Delecao do servidor cancelada.")
+			return
+		}
+
 		err = internal.DeleteServer(name)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		fmt.Println("Servidor deletado com sucesso:", name)
 	},
 }
 
@@ -143,6 +179,7 @@ var serverUpdateCmd = &cobra.Command{
 	Short: "Atualiza um servidor cadastrado",
 	Run: func(cmd *cobra.Command, args []string) {
 		var name string
+		var confirm bool
 
 		servers, err := internal.ListServers()
 		if err != nil {
@@ -204,6 +241,20 @@ var serverUpdateCmd = &cobra.Command{
 			Message: "Porta:",
 			Default: strconv.Itoa(server.Port),
 		}, &server.Port)
+
+		survey.AskOne(&survey.Confirm{
+			Message: "Confirmar atualizacao do servidor?",
+			Default: true,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Atualizacao do servidor cancelada.")
+			return
+		}
 
 		err = internal.UpdateServer(name, server)
 		if err != nil {
