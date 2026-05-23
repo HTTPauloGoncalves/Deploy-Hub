@@ -18,7 +18,6 @@ var deployCmd = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		serviceName := ""
-		var confirm bool
 
 		if len(args) > 0 {
 			serviceName = args[0]
@@ -55,19 +54,6 @@ var deployCmd = &cobra.Command{
 		err := internal.Deploy(serviceName)
 		if err != nil {
 			fmt.Println("Erro:", err)
-			return
-		}
-		survey.AskOne(&survey.Confirm{
-			Message: "O deploy foi executado com sucesso. Deseja marcar o deploy como finalizado?",
-			Default: true,
-		}, &confirm)
-		if err != nil {
-			fmt.Println("Erro:", err)
-			return
-		}
-
-		if !confirm {
-			fmt.Println("O deploy não foi marcado como finalizado.")
 			return
 		}
 
