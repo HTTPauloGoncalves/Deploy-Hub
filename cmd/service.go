@@ -27,6 +27,7 @@ var serviceAddCmd = &cobra.Command{
 		var server string
 		var path string
 		var commands []string
+		var confirm bool
 
 		servers, err := internal.ListServers()
 		if err != nil {
@@ -70,6 +71,20 @@ var serviceAddCmd = &cobra.Command{
 			}
 		}
 
+		err = survey.AskOne(&survey.Confirm{
+			Message: "Confirmar adicao do servico?",
+			Default: true,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Adicao do servico cancelada.")
+			return
+		}
+
 		service := config.Service{
 			Server:   server,
 			Path:     path,
@@ -91,6 +106,7 @@ var serviceDeleteCmd = &cobra.Command{
 	Short: "Deleta um servico de deploy",
 	Run: func(cmd *cobra.Command, args []string) {
 		var name string
+		var confirm bool
 
 		services, err := internal.ListServices()
 		if err != nil {
@@ -111,6 +127,19 @@ var serviceDeleteCmd = &cobra.Command{
 		}, &name)
 		if err != nil {
 			fmt.Println("Erro:", err)
+			return
+		}
+		err = survey.AskOne(&survey.Confirm{
+			Message: fmt.Sprintf("Tem certeza que deseja deletar o servico '%s'?", name),
+			Default: false,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Delecao do servico cancelada.")
 			return
 		}
 
@@ -159,6 +188,7 @@ var serviceUpdateCmd = &cobra.Command{
 		var server string
 		var path string
 		var commands []string
+		var confirm bool
 		keepCommands := true
 
 		services, err := internal.ListServices()
@@ -239,6 +269,20 @@ var serviceUpdateCmd = &cobra.Command{
 				fmt.Println("Erro:", err)
 				return
 			}
+		}
+
+		err = survey.AskOne(&survey.Confirm{
+			Message: "Confirmar atualizacao do servico?",
+			Default: true,
+		}, &confirm)
+		if err != nil {
+			fmt.Println("Erro:", err)
+			return
+		}
+
+		if !confirm {
+			fmt.Println("Atualizacao do servico cancelada.")
+			return
 		}
 
 		service := config.Service{
