@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// implementar mais funções
 var configCmd = &cobra.Command{
 	Use:     "config",
 	Aliases: []string{"confg"},
